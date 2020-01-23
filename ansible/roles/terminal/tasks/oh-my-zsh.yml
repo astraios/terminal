@@ -1,0 +1,63 @@
+---
+
+# Check if oh-my-zsh is installed
+- name: Check if oh-my-zsh is already installed
+  stat:
+    path: ~/.oh-my-zsh
+  register: check_ohmyzsh
+  tags: [ ohmyzsh ]
+
+# Install oh-my-zsh
+- name: Install oh-my-zsh
+  shell: |
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  when: check_ohmyzsh.stat.exists == false
+  tags: [ ohmyzsh ]
+
+# Configuration
+- name: deploy symlink for .oh-my-zsh
+  file:
+    path: "~/.zshrc"
+    src: "{{ vcs_path }}/github.com/notuscloud/workspace-dotfiles/platform/{{ platform }}/dot.zshrc"
+    state: link
+    force: yes
+  tags: [ tmux, symlink ]
+
+# Plugings
+- name: Install zsh-autocompletion
+  git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions.git
+    dest: ~/.oh-my-zsh/plugins/zsh-autosuggestions
+    depth: 1
+  tags: [ repositories, always ]
+
+# Theming
+- name: Install PowerLevel10K
+  git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: ~/.oh-my-zsh/themes/powerlevel10k
+    depth: 1
+  tags: [ repositories, always ]
+
+- name: deploy symlink for .p10k.zsh
+  file:
+    path: "~/.p10k.zsh"
+    src: "{{ vcs_path }}/github.com/notuscloud/workspace-dotfiles/platform/{{ platform }}/dot.p10k.zsh"
+    state: link
+    force: yes
+  tags: [ ohmyzsh, symlink ]
+
+- name: Install recommended fonts
+  uri:
+    url: "{{ item }}"
+    dest: ~/Library/Fonts
+    follow_redirects: yes
+    mode: 0755
+    status_code: 200, 304
+  loop:
+    - https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS%20NF%20Regular.ttf
+    - https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS%20NF%20Bold.ttf
+    - https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS%20NF%20Italic.ttf
+    - https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS%20NF%20Bold%20Italic.ttf
+  when: platform == "osx"
+  tags: [ terminal, fonts]

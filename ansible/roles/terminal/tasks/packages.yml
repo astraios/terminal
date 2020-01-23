@@ -1,0 +1,16 @@
+---
+
+- name: Install packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages }}"
+  tags: [ packages ]
+
+- name: Install pip packages
+  pip:
+    executable: pip3
+    name: "{{ item }}"
+    state: present
+  loop: "{{ pip }}"
+  tags: [ packages, pip ]

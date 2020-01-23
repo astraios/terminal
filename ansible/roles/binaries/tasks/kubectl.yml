@@ -1,0 +1,44 @@
+---
+
+- name: Get latest available version
+  uri:
+    url: https://storage.googleapis.com/kubernetes-release/release/stable.txt
+    return_content: yes
+  register: kubectl_available
+  tags: [ kubectl ]
+
+- name: Check if kubectl is installed
+  stat:
+    path: /usr/local/bin/kubectl
+  register: kubectl_bin
+  tags: [ kubectl ]
+
+# If kubectl is installed, check the version
+- name: Check kubectl version
+  shell: kubectl version --client -o json | jq -r ".clientVersion.gitVersion"
+  register: installed_kubectl_version
+  when: kubectl_bin.stat.exists == true
+  tags: [ kubectl ]
+
+- name: Download latest kubectl version
+  uri:
+    url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_available.content | trim }}/bin/{{ platform }}/amd64/kubectl"
+    dest: /usr/local/bin/kubectl
+    follow_redirects: yes
+    mode: 0755
+    status_code: 200, 304
+  when:
+    - kubectl_bin.stat.exists == false
+  tags: [ kubectl ]
+
+- name: replace old version of kubectl
+  uri:
+    url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_available.content | trim }}/bin/{{ platform }}/amd64/kubectl"
+    dest: /usr/local/bin/kubectl
+    follow_redirects: yes
+    mode: 0755
+    status_code: 200, 304
+  when:
+    - installed_kubectl_version is defined
+    - installed_kubectl_version.stdout_lines != kubectl_available.content
+  tags: [ kubectl ]

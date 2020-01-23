@@ -1,0 +1,13 @@
+---
+
+- name: OSX - set_fact - platform
+  set_fact:
+    platform: darwin
+  when: ansible_distribution == "MacOSX"
+  tags: [ always, facts ]
+
+- name: OSX - set_fact - platform
+  set_fact:
+    platform: linux
+  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+  tags: [ always, facts ]

@@ -1,0 +1,8 @@
+---
+# invocation: ansible-playbook -i inventory playbooks/binaries.yml -K
+
+- hosts: all
+  roles:
+    - ../roles/binaries
+  connection: local
+  become: yes

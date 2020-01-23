@@ -1,0 +1,23 @@
+---
+# Tmux related tasks
+
+# Install tpm
+- name: Check tpm install
+  stat:
+    path: ~/.tmux/plugin/tpm
+  register: check_tpm
+  tags: [ tmux ]
+
+- name: Install tpm
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: ~/.tmux/plugins/tpm
+  tags: [ tmux ]
+
+- name: deploy symlink for .tmux.conf
+  file:
+    path: "~/.tmux.conf"
+    src: "{{ vcs_path }}/github.com/notuscloud/workspace-dotfiles/platform/{{ platform }}/dot.tmux.conf"
+    state: link
+    force: yes
+  tags: [ tmux, symlink ]

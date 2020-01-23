@@ -1,0 +1,17 @@
+# Check directory structure
+
+- name: Create/Check paths
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop: "{{ repositories_structure }}"
+  tags: [ repositories, always ]
+
+# Pull dotfiles repository
+- name: Checking out repositories
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.dest }}"
+  loop: "{{ git.repositories }}"
+  tags: [ repositories, always ]
+  ignore_errors: yes

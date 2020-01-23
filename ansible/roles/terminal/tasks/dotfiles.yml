@@ -1,0 +1,6 @@
+---
+
+# Register platform fact linux or osx
+# symlink dotfile/.config
+# symlink .tmux.conf
+# symlink .zshrc

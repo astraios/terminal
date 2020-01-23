@@ -1,0 +1,14 @@
+---
+
+# Used in dotfiles repository to pul the correct tmux and zshrc configs
+- name: OSX - set_fact - platform
+  set_fact:
+    platform: osx
+  when: ansible_distribution == "MacOSX"
+  tags: [ always, facts ]
+
+- name: Debian - set_fact - platform
+  set_fact:
+    platform: linux
+  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+  tags: [ always, facts ]

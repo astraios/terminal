@@ -1,0 +1,30 @@
+---
+
+packages:
+  - tmux
+  - fzf
+  - nvim
+  - jq
+  - tig
+  - tree
+
+pip:
+  - awscli
+  - argcomplete
+  - boto3
+
+repositories_structure:
+  # Github
+  - "~/Workspace/VCS/github.com/astraios"
+  - "~/Workspace/VCS/github.com/notuscloud"
+  # BitBucket
+  - "~/Workspace/VCS/bitbucket.com"
+
+vcs_path: "~/Workspace/VCS"
+
+git:
+  repositories:
+    - name: notuscloud-dotfiles
+      repo: git@github.com:notuscloud/workspace-dotfiles.git
+      dest: "{{ vcs_path }}/github.com/notuscloud/workspace-dotfiles"
+
