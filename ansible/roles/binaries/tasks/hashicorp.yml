@@ -1,0 +1,7 @@
+---
+
+- include_tasks: hashicorp_binary_loop.yml
+  loop: "{{ hashicorp.binaries }}"
+  loop_control:
+    loop_var: outer_item
+  tags: [ hashicorp ]

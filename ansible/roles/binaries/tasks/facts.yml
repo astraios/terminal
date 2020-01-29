@@ -6,8 +6,8 @@
   when: ansible_distribution == "MacOSX"
   tags: [ always, facts ]
 
-- name: OSX - set_fact - platform
+- name: Linux - set_fact - platform
   set_fact:
     platform: linux
-  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+  when: ansible_distribution != "MacOSX"
   tags: [ always, facts ]

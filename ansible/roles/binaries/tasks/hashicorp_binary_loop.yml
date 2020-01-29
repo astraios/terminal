@@ -1,0 +1,50 @@
+---
+
+
+- name: "Check if {{ outer_item.name }} is installed"
+  command: which "{{ outer_item.name }}"
+  register: which_output
+  ignore_errors: yes
+  tags: [ hashicorp ]
+
+- name: "Check {{ outer_item.name }} version"
+  command: "{{ outer_item.name }} version"
+  register: bin_version_check
+  when: which_output.rc == 0
+  tags: [ hashicorp ]
+
+- set_fact:
+    current_version: "{{ bin_version_check.stdout.split(' v')[1] }}"
+  when: bin_version_check.stdout is defined
+  tags: [ hashicorp ]
+
+- name: "ensure {{ download_dir }} exists"
+  file:
+    path: "{{ download_dir }}"
+    state: directory
+  tags: [ hashicorp ]
+
+- name: "Download {{ outer_item.name }} v{{ outer_item.version }}"
+  uri:
+    url: "https://releases.hashicorp.com/{{ outer_item.name }}/{{ outer_item.version }}/{{ outer_item.name }}_{{ outer_item.version }}_{{ platform }}_amd64.zip"
+    dest: "{{ download_dir }}/."
+    follow_redirects: yes
+    mode: 0755
+    status_code: 200, 304
+  register: uri_result
+  when:
+    - current_version is defined
+    - current_version != outer_item.version
+  tags: [ hashicorp ]
+
+- debug:
+    msg: "{{ uri_result }}"
+
+- name: Unarchive zip
+  unarchive:
+    src: "{{ download_dir }}/{{ outer_item.name }}_{{ outer_item.version }}_{{ platform }}_amd64.zip"
+    dest: "/usr/local/bin"
+    mode: 0755
+  when: uri_result.changed == true
+  tags: [ hashicorp ]
+
