@@ -8,6 +8,7 @@ packages:
   - tig
   - tree
   - wget
+  - watch
 
 pip:
   - awscli
