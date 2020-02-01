@@ -33,6 +33,18 @@
     status_code: 200, 304
   register: uri_result
   when:
+    - current_version is not defined
+  tags: [ hashicorp ]
+
+- name: "Updating to {{ outer_item.name }} v{{ outer_item.version }}"
+  uri:
+    url: "https://releases.hashicorp.com/{{ outer_item.name }}/{{ outer_item.version }}/{{ outer_item.name }}_{{ outer_item.version }}_{{ platform }}_amd64.zip"
+    dest: "{{ download_dir }}/."
+    follow_redirects: yes
+    mode: 0755
+    status_code: 200, 304
+  register: uri_result
+  when:
     - current_version is defined
     - current_version != outer_item.version
   tags: [ hashicorp ]
