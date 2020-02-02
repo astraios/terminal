@@ -31,7 +31,7 @@
     follow_redirects: yes
     mode: 0755
     status_code: 200, 304
-  register: uri_result
+  register: uri_result_install
   when:
     - current_version is not defined
   tags: [ hashicorp ]
@@ -43,7 +43,7 @@
     follow_redirects: yes
     mode: 0755
     status_code: 200, 304
-  register: uri_result
+  register: uri_result_update
   when:
     - current_version is defined
     - current_version != outer_item.version
@@ -57,6 +57,6 @@
     src: "{{ download_dir }}/{{ outer_item.name }}_{{ outer_item.version }}_{{ platform }}_amd64.zip"
     dest: "/usr/local/bin"
     mode: 0755
-  when: uri_result.changed == true
+  when: uri_result_update.changed == true || uri_result_install.changed == true
   tags: [ hashicorp ]
 
