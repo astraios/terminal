@@ -49,9 +49,6 @@
     - current_version != outer_item.version
   tags: [ hashicorp ]
 
-- debug:
-    msg: "{{ uri_result }}"
-
 - name: Unarchive zip
   unarchive:
     src: "{{ download_dir }}/{{ outer_item.name }}_{{ outer_item.version }}_{{ platform }}_amd64.zip"
