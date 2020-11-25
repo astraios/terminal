@@ -39,6 +39,6 @@
     mode: 0755
     status_code: 200, 304
   when:
-    - installed_kubectl_version is defined
+    - installed_kubectl_version.changed
     - installed_kubectl_version.stdout_lines != kubectl_available.content
   tags: [ kubectl ]

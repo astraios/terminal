@@ -1,4 +1,11 @@
 ---
+# Prerequisite package install
+#- name: Install additional requirements
+#  package:
+#    name: "{{ item }}"
+#    state: present
+#  loop:
+#    - unzip
 
 - include_tasks: facts.yml
 - include_tasks: hashicorp.yml

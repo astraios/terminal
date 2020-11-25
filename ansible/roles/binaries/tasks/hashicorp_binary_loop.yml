@@ -52,6 +52,7 @@
 - name: Unarchive zip
   unarchive:
     src: "{{ download_dir }}/{{ outer_item.name }}_{{ outer_item.version }}_{{ platform }}_amd64.zip"
+    remote_src: yes
     dest: "/usr/local/bin"
     mode: 0755
   when: (uri_result_update.changed == true) or (uri_result_install.changed == true)

@@ -4,5 +4,4 @@
 - hosts: all
   roles:
     - ../roles/binaries
-  connection: local
   become: yes

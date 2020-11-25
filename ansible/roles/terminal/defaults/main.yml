@@ -2,13 +2,14 @@
 
 packages:
   - tmux
-  - fzf
-  - nvim
+#  - fzf
+#  - nvim
   - jq
   - tig
   - tree
   - wget
   - watch
+  - unzip
 
 pip:
   - awscli
@@ -29,4 +30,7 @@ git:
     - name: notuscloud-dotfiles
       repo: git@github.com:notuscloud/workspace-dotfiles.git
       dest: "{{ vcs_path }}/github.com/notuscloud/workspace-dotfiles"
+    - name: astraios-envtools
+      repo: git@github.com:astraios/env-tools.git
+      dest: "{{ vcs_path }}/github.com/astraios/env-tools"
 

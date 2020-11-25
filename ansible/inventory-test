@@ -1,0 +1,2 @@
+[all]
+cluster-node0 ansible_user=root ansible_connection=docker

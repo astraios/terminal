@@ -6,3 +6,5 @@
 - include_tasks: dotfiles.yml
 - include_tasks: oh-my-zsh.yml
 - include_tasks: tmux.yml
+
+- include_tasks: terminal.yml
